@@ -18,7 +18,6 @@ df=df.fillna(df.mean())
 lables=df.keys()
 print(lables)
 
-results = pd.DataFrame(columns=["Config","Clusters", "Iterations","Inertia"])
 
 def simple_k_means(num_cluster):
     global results
@@ -45,48 +44,60 @@ def k_means_plus_plus(num_cluster):
 
     print("K-means++ - clusters: " + str(num_cluster) + "!")
 
+def compute_centroids(num_cluster,samples):
+
+    centroids= pd.DataFrame(columns=lables)
+    ary = cdist(samples, samples, 'euclid')
+    distances = pd.DataFrame(ary)
+    neighborhood_threshold = distances.mean().mean() / (num_cluster*num_cluster)
+    while(len(centroids)<num_cluster):
+        ary = cdist(samples, samples, 'euclid')
+        distances = pd.DataFrame(ary)
+        neighborhood_counts=distances[distances < neighborhood_threshold ].count()
+        max_idx=neighborhood_counts.idxmax()
+        center_=samples.iloc[max_idx]
+        centroids.append(center_)
+        centroids.loc[len(centroids)] = center_
+
+        n_idxs=distances[distances[max_idx] < neighborhood_threshold].index
+        samples=samples.drop(samples.index[n_idxs])
+
+        print(str(len(centroids))+" Selected Index="+str(max_idx)+" with "+str(neighborhood_counts[max_idx])+" neighbors. starting "+str(len(distances))+" samples")
+    return centroids.to_numpy()
+
 def k_means_modified(num_cluster):
     global results
-    ary = cdist(df, df, 'euclid')
-    distances=pd.DataFrame(ary)
-    print(distances.head())
-    print(len(distances))
-    neighborhood_threshold=distances.mean().mean()/num_cluster
 
-    print(distances[distances < neighborhood_threshold ].count() )
-    # for i in range(0,len(distances)):
-    #     for j in range(i+1, len(distances)):
-    #         if(distances[i][j]<neighborhood_threshold):
-    #             #print(i+j)
+    cent_=compute_centroids(num_cluster,df)
 
-
-    kmeans = KMeans(init="k-means++",n_clusters=num_cluster).fit(df)
+    print(cent_.shape)
+    kmeans = KMeans(init=cent_,n_clusters=num_cluster,n_init=1).fit(df)
     results = results.append({
-            "Config": "K-means++",
+            "Config": "modified",
             "Clusters": num_cluster,
             "Iterations": kmeans.n_iter_,
             "Inertia": '{:0.2e}'.format(kmeans.inertia_)
     }, ignore_index=True)
 
-    print("K-means++ - clusters: " + str(num_cluster) + "!")
+    print("modified - clusters: " + str(num_cluster) + "!")
 
-k_means_modified(10)
+results = pd.DataFrame(columns=["Config","Clusters", "Iterations","Inertia"])
+for nc in range(2,15):
+     simple_k_means(nc)
 
-# threads = []
-#
-# for nc in range(2,50):
-#     t = threading.Thread(target=simple_k_means,args=(nc,))
-#     threads.append(t)
-#
-# for nc in range(2,50):
-#     t = threading.Thread(target=k_means_plus_plus,args=(nc,))
-#     threads.append(t)
-#
-# for x in threads:
-#      x.start()
-#
-# for x in threads:
-#      x.join()
-#
-# print(results.head())
-# results.to_csv('result1.csv', index=False)
+print(results.head())
+results.to_csv('result1_simple_kmeans.csv', index=False)
+
+results = pd.DataFrame(columns=["Config","Clusters", "Iterations","Inertia"])
+for nc in range(2,15):
+     k_means_plus_plus(nc)
+
+print(results.head())
+results.to_csv('result1_plus_plus.csv', index=False)
+
+results = pd.DataFrame(columns=["Config","Clusters", "Iterations","Inertia"])
+for nc in range(2,15):
+     k_means_modified(nc)
+
+print(results.head())
+results.to_csv('result1_modified.csv', index=False)
