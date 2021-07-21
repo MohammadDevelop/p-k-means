@@ -1,14 +1,10 @@
 Config,Clusters,Iterations,Inertia
 modified,2,13,2.79e+11
-modified,3,30,2.33e+11
 modified,4,35,2.07e+11
-modified,5,44,1.91e+11
 modified,6,46,1.74e+11
-modified,7,47,1.57e+11
 modified,8,37,1.33e+11
-modified,9,61,1.24e+11
 modified,10,58,1.17e+11
-modified,11,43,1.10e+11
 modified,12,47,1.06e+11
-modified,13,68,1.01e+11
 modified,14,48,9.48e+10
+modified,16,42,8.89e+10
+modified,18,75,8.35e+10
