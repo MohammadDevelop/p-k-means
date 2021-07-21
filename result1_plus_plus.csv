@@ -1,0 +1,14 @@
+Config,Clusters,Iterations,Inertia
+K-means++,2,14,2.79e+11
+K-means++,3,15,2.33e+11
+K-means++,4,37,2.07e+11
+K-means++,5,28,1.82e+11
+K-means++,6,26,1.62e+11
+K-means++,7,14,1.45e+11
+K-means++,8,33,1.33e+11
+K-means++,9,75,1.24e+11
+K-means++,10,78,1.16e+11
+K-means++,11,20,1.10e+11
+K-means++,12,53,1.03e+11
+K-means++,13,40,9.82e+10
+K-means++,14,33,9.44e+10
