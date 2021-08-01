@@ -47,14 +47,14 @@ def k_means_plus_plus(num_cluster):
 
 
 results = pd.DataFrame(columns=["Config","Clusters", "Iterations","Inertia"])
-for nc in range(2,30,2):
+for nc in range(2,50,1):
      simple_k_means(nc)
 
 print(results.head())
 results.to_csv('result1_simple_kmeans.csv', index=False)
 
 results = pd.DataFrame(columns=["Config","Clusters", "Iterations","Inertia"])
-for nc in range(2,30,2):
+for nc in range(2,50,1):
      k_means_plus_plus(nc)
 
 print(results.head())

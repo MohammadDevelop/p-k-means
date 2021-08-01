@@ -1,3 +1,6 @@
+# p-k-means Project
+# by Mohammad Mahmoodi Varnamkhasti
+
 import pandas as pd
 import numpy as np
 from sklearn.cluster import KMeans
@@ -20,10 +23,10 @@ def compute_centroids(num_cluster,samples):
     centroids= pd.DataFrame(columns=lables)
 
     for i in range(0,num_cluster):
-        samples_=samples.sample(frac=0.5,replace=False)
+        samples_=samples.sample(frac=0.8,replace=False)
         ary = cdist(samples_, samples_, 'euclid')
         distances = pd.DataFrame(ary)
-        neighborhood_threshold = distances.mean().mean() / num_cluster
+        neighborhood_threshold = distances.mean().mean() / (num_cluster*num_cluster)
         neighborhood_counts=distances[distances < neighborhood_threshold ].count()
         max_idx=neighborhood_counts.idxmax()
         center_=samples_.iloc[max_idx]
@@ -51,7 +54,7 @@ def k_means_modified(num_cluster):
 
 
 results = pd.DataFrame(columns=["Config","Clusters", "Iterations","Inertia"])
-for nc in range(2,30,2):
+for nc in range(2,50,1):
      k_means_modified(nc)
 
 print(results.head())

@@ -1,3 +1,6 @@
+# p-k-means Project
+# by Mohammad Mahmoodi Varnamkhasti
+
 import pandas as pd
 import numpy as np
 from sklearn.cluster import KMeans
